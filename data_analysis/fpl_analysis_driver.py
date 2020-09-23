@@ -34,7 +34,7 @@ def create_player_db(last_year_csv, this_year_csv):
 
     # first fill db with this years players
     for row in current_parser:
-        player = player_object.player_obj(row[0], row[1], 0, 0, int(row[3]), 0)
+        player = player_object.player_obj(row[0], row[1], 0, 0, int(row[3]), 0 row[5])
         player_db.append(player)
 
 

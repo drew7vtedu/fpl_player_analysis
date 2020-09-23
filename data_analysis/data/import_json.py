@@ -4,6 +4,12 @@ import csv
 import requests
 from pandas.io.json import json_normalize
 
+'''teh api returns team as an integer so this function maps the int to a string
+    I'm using the exact strings used by fbref.com to make scraping for xg easier later'''
+def calc_team(team_num):
+    current_prem_teams = {"Arsenal", "Aston Villa", "Brighton", "Burnley", "Chelsea", "Crystal Palace", "Everton", "Fulham", "Leicester", "Leeds United", "Liverpool", "Manchester City", "Manchester Utd", "Newcastle Utd", "Sheffield Utd", "Southampton", "Tottenham", "West Brom", "West Ham", "Wolves"}
+    return current_prem_teams[team_num - 1]
+
 
 # Define a function to get info from the FPL API and save to the specified file_path
 # It might be a good idea to navigate to the link in a browser to get an idea of what the data looks like
@@ -33,7 +39,7 @@ players = data_dict["elements"]
 # we will fill this list with data and convert it to csv later
 csv_player_list = []
 # column headers for when we convert to csv
-csv_columns = ["first_name", "last_name", "current_points", "price", "minutes"]
+csv_columns = ["first_name", "last_name", "current_points", "price", "minutes", "team"]
 
 for player in players:
     # create dict to fill with each player's data
@@ -44,6 +50,7 @@ for player in players:
     temp_player_dict["current_points"] = int(player["total_points"])
     temp_player_dict["price"] = int(player["now_cost"])
     temp_player_dict["minutes"] = int(player["minutes"])
+    temp_player_dict["team"] = calc_team(player["team"])
     # add data to list to become csv
     csv_player_list.append(temp_player_dict)
 
