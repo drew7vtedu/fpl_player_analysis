@@ -15,4 +15,4 @@ def points_scored_per_match_per_mil(points, matches, price):
 
 # best available metric, eliminate base 2 points for appearance to get real difference per match between players
 def value_added_per_mil(points, matches, price):
-    return (points_scored_per_match((points - (2 * 38)), matches) / price)
+    return (points_scored_per_match((points - (2 * matches)), matches) / price)

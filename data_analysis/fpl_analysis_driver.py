@@ -4,7 +4,7 @@ import fantasy_value_metrics as metrics
 
 def save_db(players):
 
-    csv_columns = ["first_name", "last_name", "points_last_season", "current_points", "price", "minutes", "points_per_90", "points_per_match", "points_per_match2", "value_added_per_mil"]
+    csv_columns = ["first_name", "last_name", "points_last_season", "current_points", "price", "minutes", "points_per_90", "points_per_match", "points_per_match_minus_starts", "value_added_per_mil"]
 
     outfile = open("./Data/saved_player_db.csv", 'w')
     # write headers for each column of the csv
@@ -34,6 +34,7 @@ def create_player_db(last_year_csv, this_year_csv):
 
     # first fill db with this years players
     for row in current_parser:
+        # first_name, last_name, pls, cp, price, ly_mins, mins, team
         player = player_object.player_obj(row[0], row[1], 0, 0, int(row[3]), 0 row[5])
         player_db.append(player)
 
@@ -43,11 +44,11 @@ def create_player_db(last_year_csv, this_year_csv):
         for player in player_db:
             if player.matches(row[0], row[1]):
                 player.set_pls(int(row[4]))
-                player.set_minutes(int(row[5]))
-                player.set_points_per_90(metrics.points_scored_per_90(int(row[4]), int(row[5])))
-                player.set_points_per_match(metrics.points_scored_per_match(int(row[4]), 38))
-                player.set_points_per_match2(metrics.points_scored_per_match(int(row[4]) - (2 * 38), 38))
-                player.set_value_added_per_mil(metrics.value_added_per_mil(int(row[4]), 38, player.get_price()))
+                player.set_ly_minutes(int(row[5]))
+                player.set_ly_points_per_90(metrics.points_scored_per_90(int(row[4]), int(row[5])))
+                player.set_ly_points_per_match(metrics.points_scored_per_match(int(row[4]), 38))
+                player.set_ly_points_per_match2(metrics.points_scored_per_match(int(row[4]) - (2 * 38), 38))
+                player.set_ly_value_added_per_mil(metrics.value_added_per_mil(int(row[4]), 38, player.get_price()))
 
     last_year.close()
     this_year.close()
