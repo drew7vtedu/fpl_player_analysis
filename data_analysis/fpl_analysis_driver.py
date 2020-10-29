@@ -3,8 +3,13 @@ import player_object
 import fantasy_value_metrics as metrics
 
 def save_db(players):
-
-    csv_columns = ["first_name", "last_name", "points_last_season", "current_points", "price", "minutes", "points_per_90", "points_per_match", "points_per_match_minus_starts", "value_added_per_mil"]
+    # first_name, last_name, points_last_season, current_points, price, ly_minutes
+    # ly_points_per_90, ly_points_per_match, ly_points_per_match_minus_appearance
+    # ly_value_added_per_mil, minutes, points_per_90, points_per_match,
+    # points_per_match_minus_starts, value_added_per_mil, team
+    csv_columns = ["first_name", "last_name", "points_last_season", "current_points", "price", "ly_minutes", "ly_points_per_90",;
+     "ly_points_per_match", "ly_points_per_match_minus_appearance", "ly_value_added_per_mil";
+     "minutes", "points_per_90", "points_per_match", "points_per_match_minus_starts", "value_added_per_mil", "team"]
 
     outfile = open("./Data/saved_player_db.csv", 'w')
     # write headers for each column of the csv
