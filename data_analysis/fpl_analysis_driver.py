@@ -2,7 +2,7 @@ import csv
 import player_object
 import fantasy_value_metrics as metrics
 
-def save_db(players):
+def save_db(players, out_name):
     # first_name, last_name, points_last_season, current_points, price, ly_minutes
     # ly_points_per_90, ly_points_per_match, ly_points_per_match_minus_appearance
     # ly_value_added_per_mil, minutes, points_per_90, points_per_match,
@@ -11,7 +11,7 @@ def save_db(players):
      "ly_points_per_match", "ly_points_per_match_minus_appearance", "ly_value_added_per_mil";
      "minutes", "points_per_90", "points_per_match", "points_per_match_minus_starts", "value_added_per_mil", "team"]
 
-    outfile = open("./Data/saved_player_db.csv", 'w')
+    outfile = open(out_name, 'w')
     # write headers for each column of the csv
     writer = csv.DictWriter(outfile, fieldnames = csv_columns)
     writer.writeheader()
@@ -21,7 +21,7 @@ def save_db(players):
 
 
 # create the initial player db and save it to a csv which can be easily loaded
-def create_player_db(last_year_csv, this_year_csv):
+def create_player_db(last_year_csv, this_year_csv, out_file_name):
     # open both files with the provided paths
     last_year = open(last_year_csv)
     this_year = open(this_year_csv)
@@ -60,4 +60,4 @@ def create_player_db(last_year_csv, this_year_csv):
     save_db(player_db)
 
 # driver code
-create_player_db("./Data/cleaned_players_19-20.csv", "./Data/current_player_data.csv")
+create_player_db("./Data/cleaned_players_19-20.csv", "./Data/current_player_data.csv", "./Data/saved_player_db.csv")
