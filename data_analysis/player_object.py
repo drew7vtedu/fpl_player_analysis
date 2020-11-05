@@ -1,6 +1,7 @@
 class player_obj(object):
 
-    def __init__(self, first_name, last_name, pls, cp, price, ly_mins, mins, team):
+    def __init__(self, id, first_name, last_name, pls, cp, price, ly_mins, mins, team):
+        self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.points_last_season = pls
@@ -16,7 +17,10 @@ class player_obj(object):
         self.points_per_match = 0
         self.points_per_match_minus_starts= 0
         self.value_added_per_mil = 0
-        self.team = team
+        self.xg = 0
+        self.npxg = 0
+        self.xa = 0
+        self.team_id = team
 
     def matches(self, first_name, last_name):
         return first_name == self.first_name and last_name == self.last_name

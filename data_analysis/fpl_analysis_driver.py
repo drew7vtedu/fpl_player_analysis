@@ -1,14 +1,14 @@
 import csv
-import player_object
-import fantasy_value_metrics as metrics
+from . import player_object
+from . import fantasy_value_metrics as metrics
 
 def save_db(players, out_name):
     # first_name, last_name, points_last_season, current_points, price, ly_minutes
     # ly_points_per_90, ly_points_per_match, ly_points_per_match_minus_appearance
     # ly_value_added_per_mil, minutes, points_per_90, points_per_match,
     # points_per_match_minus_starts, value_added_per_mil, team
-    csv_columns = ["first_name", "last_name", "points_last_season", "current_points", "price", "ly_minutes", "ly_points_per_90",;
-     "ly_points_per_match", "ly_points_per_match_minus_appearance", "ly_value_added_per_mil";
+    csv_columns = ["first_name", "last_name", "points_last_season", "current_points", "price", "ly_minutes", "ly_points_per_90",
+     "ly_points_per_match", "ly_points_per_match_minus_appearance", "ly_value_added_per_mil",
      "minutes", "points_per_90", "points_per_match", "points_per_match_minus_starts", "value_added_per_mil", "team"]
 
     outfile = open(out_name, 'w')
@@ -40,7 +40,7 @@ def create_player_db(last_year_csv, this_year_csv, out_file_name):
     # first fill db with this years players
     for row in current_parser:
         # first_name, last_name, pls, cp, price, ly_mins, mins, team
-        player = player_object.player_obj(row[0], row[1], 0, 0, int(row[3]), 0 row[5])
+        player = player_object.player_obj(row[0], row[1], 0, 0, int(row[3]), 0, row[5])
         player_db.append(player)
 
 
@@ -58,6 +58,7 @@ def create_player_db(last_year_csv, this_year_csv, out_file_name):
     last_year.close()
     this_year.close()
     save_db(player_db)
+    outfile.close()
 
 # driver code
-create_player_db("./Data/cleaned_players_19-20.csv", "./Data/current_player_data.csv", "./Data/saved_player_db.csv")
+#create_player_db("./data/cleaned_players_19-20.csv", "./data/current_player_data.csv", "./data/saved_player_db.csv")
