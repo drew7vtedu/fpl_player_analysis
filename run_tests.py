@@ -7,4 +7,5 @@ this file is necessay to run tests because of the way Python relative imports wo
 '''
 
 driver = test_driver.TestFantasyAnalysisDriver()
+driver.setUp()
 driver.test_create_player_db()

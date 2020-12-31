@@ -18,6 +18,8 @@ def save_db(players, out_name):
     for player in players:
         writer.writerow(player.to_dict())
 
+    outfile.close()
+
 
 
 # create the initial player db and save it to a csv which can be easily loaded
@@ -57,8 +59,8 @@ def create_player_db(last_year_csv, this_year_csv, out_file_name):
 
     last_year.close()
     this_year.close()
-    save_db(player_db)
-    outfile.close()
+    save_db(player_db, out_file_name)
+
 
 # driver code
 #create_player_db("./data/cleaned_players_19-20.csv", "./data/current_player_data.csv", "./data/saved_player_db.csv")
