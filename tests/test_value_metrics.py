@@ -3,7 +3,7 @@ from data_analysis import fantasy_value_metrics as fvm
 import unittest
 
 
-class TestFantasyAnalysisDriver(unittest.TestCase):
+class TestFantasyValueMetrics(unittest.TestCase):
 
 
     def setUp(self):
