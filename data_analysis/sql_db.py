@@ -2,17 +2,27 @@ import mysql.connector
 import player_object
 import team_object
 import fantasy_value_metrics as metrics
+from dotenv import load_dotenv
+import os
 
 class sql_db_connector(object):
 
     def __init__(self):
+        load_dotenv()
         self.mydb = mysql.connector.connect(
           host="localhost",
-          user="root",
-          password="password",
+          user=os.getenv("SQL_USER"),
+          password=os.getenv("SQL_PASSWORD"),
           database="fplanalysis"
         )
         self.mycursor = self.mydb.cursor()
+
+
+    def create_db(self):
+        schema = open("./fpl_analysis_schema.sql")
+        sql = schema.read()
+        self.mycursor.execute(sql)
+
 
 
     def use_db(self):
@@ -44,7 +54,8 @@ class sql_db_connector(object):
 if __name__ == "__main__":
     db = sql_db_connector()
     player = player_object.player_obj(1, "first", "last", 0, 0, 1, 0, 1, 1)
-    db.clear_all()
+    #db.clear_all()
+    db.create_db()
     db.use_db()
     db.insert_player(player)
-    db.get_top_scorer()
+    #db.get_top_scorer()

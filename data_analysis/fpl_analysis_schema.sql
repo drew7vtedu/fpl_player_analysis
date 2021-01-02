@@ -12,7 +12,6 @@ CREATE TABLE players (
     ly_minutes INT,
     minutes INT,
     xg FLOAT,
-	  npxg FLOAT,
 	  expected_assists FLOAT,
     team_id INT
     );
@@ -22,13 +21,13 @@ CREATE TABLE teams (
     goals_for INT,
     goals_against INT,
     xg FLOAT,
-    npxg FLOAT,
     xga FLOAT,
     schedule_id INT
 );
 
-CREATE TABLE schedules (
-    team_id INT PRIMARY KEY,
+CREATE TABLE fixtures (
+    id INT AUTO_INCREMENT
+    team_id INT,
     gameweek INT,
     opponent TEXT
 );
