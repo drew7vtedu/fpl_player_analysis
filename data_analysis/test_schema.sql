@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS fplanalysis;
-CREATE DATABASE IF NOT EXISTS fplanalysis;
+DROP DATABASE IF EXISTS testfpl;
+CREATE DATABASE IF NOT EXISTS testfpl;
 USE fplanalysis;
 
 CREATE TABLE players (

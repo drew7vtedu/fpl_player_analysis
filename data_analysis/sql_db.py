@@ -13,11 +13,18 @@ class sql_db_connector(object):
           host="localhost",
           user=os.getenv("SQL_USER"),
           password=os.getenv("SQL_PASSWORD"),
-          database="fplanalysis",
-          auth_plugin='auth_socket'
+          database="fplanalysis"
         )
         self.mycursor = self.mydb.cursor()
 
+
+    def use_test_db(self):
+        self.mycursor.execute("USE testfpl;")
+
+    def create_test_db(self):
+        schema = open("./test_schema.sql")
+        sql = schema.read()
+        self.mycursor.execute(sql)
 
     def create_db(self):
         schema = open("./fpl_analysis_schema.sql")
@@ -44,6 +51,13 @@ class sql_db_connector(object):
         values = (team.id, team.map_team(team.id), team.goals_for, team.goals_against, team.xg, team.npxg, team.xga)
         self.mycursor.execute(sql, values)
         self.mydb.commit()
+
+    def insert_fixture(self, fixture):
+        sql = "INSERT INTO fixtures (home_team_id, away_team_id, gameweek) VALUES (%s %s %s)"
+        values = (fixture.home_team_id, fixture.away_team_id, fixture.gameweek)
+        self.mycursor.execute(sql, values)
+        self.mydb.commit()
+
 
     def get_top_scorer(self):
         sql = "SELECT first_name, last_name, current_points FROM players ORDER BY current_points LIMIT 1"
