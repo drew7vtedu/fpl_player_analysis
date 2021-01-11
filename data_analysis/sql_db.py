@@ -1,7 +1,7 @@
 import mysql.connector
-import player_object
-import team_object
-import fantasy_value_metrics as metrics
+from data_analysis import player_object
+from data_analysis import team_object
+from data_analysis import fantasy_value_metrics as metrics
 from dotenv import load_dotenv
 import os
 
@@ -13,7 +13,8 @@ class sql_db_connector(object):
           host="localhost",
           user=os.getenv("SQL_USER"),
           password=os.getenv("SQL_PASSWORD"),
-          database="fplanalysis"
+          database="fplanalysis",
+          auth_plugin='auth_socket'
         )
         self.mycursor = self.mydb.cursor()
 
