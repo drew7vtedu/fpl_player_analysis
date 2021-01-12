@@ -28,11 +28,21 @@ class player_obj(object):
     '''
     current season data
     '''
+
+    def get_id(self):
+        return self.id
+
     def set_points(self, points):
         self.current_points = points
 
+    def get_points(self):
+        return self.points
+
     def set_minutes(self, mins):
         self.minutes = mins
+
+    def get_minutes(self):
+        return self.minutes
 
     def get_price(self):
         return self.price
@@ -40,14 +50,30 @@ class player_obj(object):
     def set_price(self, nPrice):
         self.price = nPrice
 
+    '''
+    sets the players team_id to the new integer corresponding
+    to the correct team
+    '''
     def set_team(self, team):
         self.team_id = team
+
+    '''
+    returns an integer representing the players team
+    '''
+    def get_team():
+        return self.team_id
 
     def set_xg(self, xg):
         self.xg = xg
 
+    def get_xg(self):
+        return self.xg
+
     def set_xa(self, xa):
         self.xa = xa
+
+    def get_xa(self):
+        return self.xa
 
 
     def to_dict(self):

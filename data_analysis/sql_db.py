@@ -18,17 +18,27 @@ class sql_db_connector(object):
         self.mycursor = self.mydb.cursor()
 
 
+    '''
+    using a test db to aviod making changes to production db
+    '''
     def use_test_db(self):
         self.mycursor.execute("USE testfpl;")
 
+    '''
+    this will create a test db with an identical schema for testing purposes
+    since this method will be called from the test directory the relative
+    path to the schema file is different
+    '''
     def create_test_db(self):
-        schema = open("./test_schema.sql")
+        schema = open("../data_analysis/test_schema.sql")
         sql = schema.read()
+        schema.close()
         self.mycursor.execute(sql)
 
     def create_db(self):
         schema = open("./fpl_analysis_schema.sql")
         sql = schema.read()
+        schema.close()
         self.mycursor.execute(sql)
 
 
@@ -65,12 +75,3 @@ class sql_db_connector(object):
         myresult = self.mycursor.fetchall()
         for x in myresult:
             print(x)
-
-if __name__ == "__main__":
-    db = sql_db_connector()
-    player = player_object.player_obj(1, "first", "last", 0, 0, 1, 0, 1, 1)
-    #db.clear_all()
-    db.create_db()
-    db.use_db()
-    db.insert_player(player)
-    #db.get_top_scorer()
