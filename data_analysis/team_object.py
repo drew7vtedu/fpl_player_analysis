@@ -6,6 +6,9 @@ class team(object):
         self.goals_against = goals_against
         self.xg = xg
         self.xga = xga
+        
+    def set_id(self, id):
+        self.id = id
 
     def set_goals_for(self, gf):
         self.goals_for = gf

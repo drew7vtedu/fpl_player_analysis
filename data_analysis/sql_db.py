@@ -35,14 +35,18 @@ class sql_db_connector(object):
         schema.close()
         self.mycursor.execute(sql)
 
+    '''
+    run the sql schema to create the database on a mysql server
+    '''
     def create_db(self):
         schema = open("./fpl_analysis_schema.sql")
         sql = schema.read()
         schema.close()
         self.mycursor.execute(sql)
 
-
-
+    '''
+    make sure we're using the correct database
+    '''
     def use_db(self):
         self.mycursor.execute("USE fplanalysis;")
 
@@ -64,7 +68,7 @@ class sql_db_connector(object):
 
     def insert_fixture(self, fixture):
         sql = "INSERT INTO fixtures (home_team_id, away_team_id, gameweek) VALUES (%s %s %s)"
-        values = (fixture.home_team_id, fixture.away_team_id, fixture.gameweek)
+        values = (fixture.home, fixture.away, fixture.gameweek)
         self.mycursor.execute(sql, values)
         self.mydb.commit()
 
