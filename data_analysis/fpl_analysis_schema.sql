@@ -21,13 +21,17 @@ CREATE TABLE teams (
     goals_for INT,
     goals_against INT,
     xg FLOAT,
-    xga FLOAT,
-    schedule_id INT
+    xga FLOAT
 );
 
 CREATE TABLE fixtures (
     id INT AUTO_INCREMENT
     home_team_id INT,
     away_team_id INT,
-    gameweek INT,
+    gameweek INT
+);
+
+CREATE TABLE names (
+  id INTEGER PRIMARY KEY,
+  name TEXT
 );

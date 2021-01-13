@@ -16,7 +16,7 @@ turn a dictionary containing team data into a team object. We assume the id is i
 because that's how we get it from fbref
 '''
 def team_from_dict(team_dict):
-    id = teams.index(team_dict["Squad"]) + 1
+    id = teams.index(team_dict["squad"]) + 1
     gf = team_dict["goals_for"]
     ga = team_dict["goals_against"]
     xg = team_dict["xg_for"]
@@ -42,21 +42,32 @@ def get_teams():
     for row in rows_team:
         team_dict = dict()
         if(row.find('th',{"scope":"row"}) != None):
-            name = row.find('th',{"data-stat":"squad"}).text.strip().encode().decode("utf-8")
-            if 'squad' in pre_df_squad:
-                pre_df_squad['squad'].append(name)
+            name = row.find('td',{"data-stat":"squad"}).text.strip().encode().decode("utf-8")
+            if 'squad' in pre_df_team:
+                pre_df_team['squad'].append(name)
             else:
-                pre_df_squad['squad'] = [name]
+                pre_df_team['squad'] = [name]
+
+            # was getting key errors before I seperated these, TODO: comment this better
+            if 'squad' in team_dict:
+                team_dict['squad'].append(name)
+            else:
+                team_dict['squad'] = name
+
             for f in features_wanted_team:
                 cell = row.find("td",{"data-stat": f})
                 a = cell.text.strip().encode()
                 text=a.decode("utf-8")
                 if f in pre_df_team:
                     pre_df_team[f].append(text)
-                    team_dict[f].append(text)
                 else:
                     pre_df_team[f] = [text]
-                    team_dict[f] = [text]
+
+
+                if f in team_dict:
+                    team_dict[f].append(text)
+                else:
+                    team_dict[f] = text
         teams_list.append(team_dict)
 
     df_team = pd.DataFrame.from_dict(pre_df_team)

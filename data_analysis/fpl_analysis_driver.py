@@ -75,4 +75,4 @@ def create_player_db(last_year_csv, this_year_csv, out_file_name):
 if __name__ == "__main__":
     db = sql_db.sql_db_connector()
     for team in scraper.get_teams():
-        db.insert_team(team)
+        db.insert_team(scraper.team_from_dict(team))

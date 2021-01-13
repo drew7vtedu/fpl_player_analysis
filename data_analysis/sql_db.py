@@ -2,6 +2,7 @@ import mysql.connector
 from data_analysis import player_object
 from data_analysis import team_object
 from data_analysis import fantasy_value_metrics as metrics
+from data_analysis.scraper import teams
 from dotenv import load_dotenv
 import os
 
@@ -61,8 +62,8 @@ class sql_db_connector(object):
         self.mydb.commit()
 
     def insert_team(self, team):
-        sql = "INSERT INTO teams (id, name, goals_for, goals_against, xg, npxg, xga) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        values = (team.id, team.map_team(team.id), team.goals_for, team.goals_against, team.xg, team.npxg, team.xga)
+        sql = "INSERT INTO teams (team_id, goals_for, goals_against, xg, xga) VALUES (%s, %s, %s, %s, %s)"
+        values = (team.id, team.goals_for, team.goals_against, team.xg, team.xga)
         self.mycursor.execute(sql, values)
         self.mydb.commit()
 
@@ -72,6 +73,13 @@ class sql_db_connector(object):
         self.mycursor.execute(sql, values)
         self.mydb.commit()
 
+    def set_names(self, id, team):
+        for team in teams:
+            sql = "INSERT INTO names (id, name) VALUES (%s, %s)"
+            values = (teams.index(team) + 1, team)
+            self.mycursor.execute(sql, values)
+            self.mydb.commit()
+
 
     def get_top_scorer(self):
         sql = "SELECT first_name, last_name, current_points FROM players ORDER BY current_points LIMIT 1"
@@ -79,3 +87,8 @@ class sql_db_connector(object):
         myresult = self.mycursor.fetchall()
         for x in myresult:
             print(x)
+
+if __name__ == "__main__":
+    db = sql_db_connector()
+    db.use_db()
+    db.set_names(1, "Arsenal")
