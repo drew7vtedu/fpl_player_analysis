@@ -4,7 +4,7 @@ import pandas as pd
 import re
 import sys, getopt
 import csv
-from ddata_analysis import team_object as to
+from data_analysis import team_object as to
 
 
 # this is an array containing all team names in the league this year, will need to be updated each season. Team id is its position in the array + 1
@@ -37,12 +37,16 @@ def get_teams():
     #Parse league_table
     pre_df_team = dict()
     teams_list = []
-    features_wanted_team = {"Squad", "goals_for", "goals_against", "xg_for", "xg_against"}
+    features_wanted_team = {"goals_for", "goals_against", "xg_for", "xg_against"}
     rows_team = teams_table.find_all('tr')
     for row in rows_team:
         team_dict = dict()
         if(row.find('th',{"scope":"row"}) != None):
-
+            name = row.find('th',{"data-stat":"squad"}).text.strip().encode().decode("utf-8")
+            if 'squad' in pre_df_squad:
+                pre_df_squad['squad'].append(name)
+            else:
+                pre_df_squad['squad'] = [name]
             for f in features_wanted_team:
                 cell = row.find("td",{"data-stat": f})
                 a = cell.text.strip().encode()

@@ -1,6 +1,15 @@
+'''
+most of this code is a relic of when I was originally doing this using only csvs.
+This will be updated to work with the mysql database after I complete the scraper
+and database connector functionality.
+'''
 import csv
-from . import player_object
-from . import fantasy_value_metrics as metrics
+from data_analysis import sql_db
+from data_analysis import player_object
+from data_analysis import team_object
+from data_analysis import fixture_object
+from data_analysis import fantasy_value_metrics as metrics
+from data_analysis import scraper
 
 def save_db(players, out_name):
     # first_name, last_name, points_last_season, current_points, price, ly_minutes
@@ -62,3 +71,8 @@ def create_player_db(last_year_csv, this_year_csv, out_file_name):
 
 # driver code
 #create_player_db("./data/cleaned_players_19-20.csv", "./data/current_player_data.csv", "./data/saved_player_db.csv")
+
+if __name__ == "__main__":
+    db = sql_db.sql_db_connector()
+    for team in scraper.get_teams():
+        db.insert_team(team)
