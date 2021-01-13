@@ -73,7 +73,7 @@ class sql_db_connector(object):
         self.mycursor.execute(sql, values)
         self.mydb.commit()
 
-    def set_names(self, id, team):
+    def set_names(self):
         for team in teams:
             sql = "INSERT INTO names (id, name) VALUES (%s, %s)"
             values = (teams.index(team) + 1, team)
@@ -91,4 +91,4 @@ class sql_db_connector(object):
 if __name__ == "__main__":
     db = sql_db_connector()
     db.use_db()
-    db.set_names(1, "Arsenal")
+    db.set_names()
