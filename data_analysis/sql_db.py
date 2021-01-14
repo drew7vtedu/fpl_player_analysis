@@ -68,12 +68,12 @@ class sql_db_connector(object):
         self.mydb.commit()
 
     def insert_fixture(self, fixture):
-        sql = "INSERT INTO fixtures (home_team_id, away_team_id, gameweek) VALUES (%s %s %s)"
-        values = (fixture.home, fixture.away, fixture.gameweek)
+        sql = "INSERT INTO fixtures (home_team_id, home_xg, away_team_id, away_xg, gameweek, postponed) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (fixture.get_home(), fixture.get_hxg(), fixture.get_away(), fixture.get_axg(), fixture.get_gameweek(), fixture.get_postponed())
         self.mycursor.execute(sql, values)
         self.mydb.commit()
 
-    def set_names(self, id, team):
+    def set_names(self):
         for team in teams:
             sql = "INSERT INTO names (id, name) VALUES (%s, %s)"
             values = (teams.index(team) + 1, team)
@@ -90,5 +90,4 @@ class sql_db_connector(object):
 
 if __name__ == "__main__":
     db = sql_db_connector()
-    db.use_db()
-    db.set_names(1, "Arsenal")
+    db.set_names()

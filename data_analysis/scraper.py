@@ -5,6 +5,7 @@ import re
 import sys, getopt
 import csv
 from data_analysis import team_object as to
+from data_analysis import fixture_object as fo
 
 
 # this is an array containing all team names in the league this year, will need to be updated each season. Team id is its position in the array + 1
@@ -22,6 +23,20 @@ def team_from_dict(team_dict):
     xg = team_dict["xg_for"]
     xga = team_dict["xg_against"]
     return to.team(id, gf, ga, xg, xga)
+
+
+'''
+turn a dictionary containing fixture data into a fixture object
+'''
+def fixture_from_dict(fd):
+    home = teams.index(fd["squad_a"]) + 1
+    hxg = fd["xg_a"]
+    away = teams.index(fd["squad_b"]) + 1
+    axg = fd["xg_b"]
+    gameweek = fd["gameweek"]
+    postponed = fd["postponed"]
+    return fo.fixture_obj(home, hxg, away, axg, gameweek, postponed)
+
 
 def get_teams():
     # fbref url to premier league stats
@@ -73,3 +88,48 @@ def get_teams():
     df_team = pd.DataFrame.from_dict(pre_df_team)
     df_team.to_csv("data/test_scrape_data.csv")
     return teams_list
+
+
+'''
+scrape fixtures from fbref
+'''
+def get_fixtures():
+    # fbref url to premier league fixtures
+    res = requests.get("https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures")
+    ## The next two lines get around the issue with comments breaking the parsing.
+    comm = re.compile("<!--|-->")
+    soup = BeautifulSoup(comm.sub("",res.text),'lxml')
+
+    # this page contains a single table with all 38 gameweeks
+    table = soup.findAll("tbody")
+
+    # a in data-stats refers to home, b to away
+    features_wanted_fixture = {"squad_a", "xg_a", "xg_b", "squad_b", "notes"}
+    fixture_list = []
+    rows_fixture = table[0].find_all('tr')
+    for row in rows_fixture:
+
+        fixture_dict = dict()
+
+        if(row.find('th',{"scope":"row"}) != None):
+            #gameweek requires special treatment
+            week = row.find('th',{"data-stat":"gameweek"}).text.strip().encode().decode("utf-8")
+            # skip blank rows
+            if week != "":
+                fixture_dict["gameweek"] = week
+                for f in features_wanted_fixture:
+                    cell = row.find("td",{"data-stat": f})
+                    a = cell.text.strip().encode()
+                    text=a.decode("utf-8")
+                    if text != '' and f != "notes":
+                        fixture_dict[f] = text
+                    elif f == "notes" and text != '':
+                        fixture_dict["postponed"] = True
+                    elif f == "notes":
+                        fixture_dict["postponed"] = False
+                    else:
+                        fixture_dict[f] = None
+        if fixture_dict != {}:
+            fixture_list.append(fixture_dict)
+
+    return fixture_list
