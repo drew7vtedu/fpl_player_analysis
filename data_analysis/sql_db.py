@@ -90,4 +90,8 @@ class sql_db_connector(object):
 
 if __name__ == "__main__":
     db = sql_db_connector()
+<<<<<<< HEAD
+=======
+    db.use_db()
+>>>>>>> 801dd8982a388405927aa09b96638c5f0e0074c1
     db.set_names()
