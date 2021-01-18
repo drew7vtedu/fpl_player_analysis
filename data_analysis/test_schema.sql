@@ -25,15 +25,14 @@ CREATE TABLE teams (
 );
 
 CREATE TABLE fixtures (
-    id INT AUTO_INCREMENT,
-    home_team_id INT,
-    home_xg INT,
-    away_team_id INT,
-    away_xg INT,
-    gameweek INT,
-);
-
-CREATE TABLE names (
-  id INTEGER PRIMARY KEY,
-  name TEXT
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  name TEXT,
+  home_team_id INT,
+  home_goals INT,
+  home_xg FLOAT,
+  away_team_id INT,
+  away_goals INT,
+  away_xg FLOAT,
+  gameweek INT,
+  postponed BOOLEAN
 );

@@ -18,6 +18,7 @@ CREATE TABLE players (
 
 CREATE TABLE teams (
     team_id INTEGER PRIMARY KEY,
+    name TEXT,
     goals_for INT,
     goals_against INT,
     xg FLOAT,
@@ -27,14 +28,11 @@ CREATE TABLE teams (
 CREATE TABLE fixtures (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     home_team_id INT,
+    home_goals INT,
     home_xg FLOAT,
     away_team_id INT,
+    away_goals INT,
     away_xg FLOAT,
     gameweek INT,
     postponed BOOLEAN
-);
-
-CREATE TABLE names (
-  id INTEGER PRIMARY KEY,
-  name TEXT
 );

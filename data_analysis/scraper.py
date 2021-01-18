@@ -30,12 +30,14 @@ turn a dictionary containing fixture data into a fixture object
 '''
 def fixture_from_dict(fd):
     home = teams.index(fd["squad_a"]) + 1
+    home_goals = fd["home_goals"]
     hxg = fd["xg_a"]
     away = teams.index(fd["squad_b"]) + 1
+    away_goals = fd["away_goals"]
     axg = fd["xg_b"]
     gameweek = fd["gameweek"]
     postponed = fd["postponed"]
-    return fo.fixture_obj(home, hxg, away, axg, gameweek, postponed)
+    return fo.fixture_obj(home, home_goals, hxg, away, away_goals, axg, gameweek, postponed)
 
 
 def get_teams():
@@ -117,6 +119,20 @@ def get_fixtures():
             # skip blank rows
             if week != "":
                 fixture_dict["gameweek"] = week
+
+                # score needs to be separated into home and away goals
+                score_cell = row.find("td",{"data-stat": "score"})
+                score_a = score_cell.text.strip().encode()
+                score = score_a.decode("utf-8")
+                # it was a nightmare figuring out that the score is seperated by an em dash not an en dash
+                split_score = score.split('–')
+                if len(split_score) > 1:
+                    fixture_dict["home_goals"] = split_score[0]
+                    fixture_dict["away_goals"] = split_score[1]
+                else:
+                    fixture_dict["home_goals"] = None
+                    fixture_dict["away_goals"] = None
+
                 for f in features_wanted_fixture:
                     cell = row.find("td",{"data-stat": f})
                     a = cell.text.strip().encode()

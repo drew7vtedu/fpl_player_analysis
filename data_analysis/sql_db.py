@@ -68,15 +68,15 @@ class sql_db_connector(object):
         self.mydb.commit()
 
     def insert_fixture(self, fixture):
-        sql = "INSERT INTO fixtures (home_team_id, home_xg, away_team_id, away_xg, gameweek, postponed) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (fixture.get_home(), fixture.get_hxg(), fixture.get_away(), fixture.get_axg(), fixture.get_gameweek(), fixture.get_postponed())
+        sql = "INSERT INTO fixtures (home_team_id, home_goals, home_xg, away_team_id, away_goals, away_xg, gameweek, postponed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (fixture.get_home(), fixture.get_home_goals(), fixture.get_hxg(), fixture.get_away(), fixture.get_away_goals(), fixture.get_axg(), fixture.get_gameweek(), fixture.get_postponed())
         self.mycursor.execute(sql, values)
         self.mydb.commit()
 
     def set_names(self):
         for team in teams:
-            sql = "INSERT INTO names (id, name) VALUES (%s, %s)"
-            values = (teams.index(team) + 1, team)
+            sql = "UPDATE teams SET name = %s WHERE team_id = %s"
+            values = (team, teams.index(team) + 1)
             self.mycursor.execute(sql, values)
             self.mydb.commit()
 
@@ -88,10 +88,28 @@ class sql_db_connector(object):
         for x in myresult:
             print(x)
 
+    def get_strength_of_schedule(self):
+        sql = '''
+        SELECT c.name, SUM(b.xg - b.xga) AS opp_goal_diff
+        FROM (SELECT team_id, away_team_id AS opp_id
+        FROM teams JOIN fixtures ON team_id = home_team_id
+        WHERE home_xg IS NOT NUll
+        UNION
+        SELECT team_id, home_team_id AS opp_id
+        FROM teams JOIN fixtures ON team_id = away_team_id
+        WHERE home_xg IS NOT NULL) a
+        JOIN teams b ON a.opp_id = b.team_id
+        JOIN teams c ON c.team_id = a.team_id
+        GROUP BY a.team_id ORDER BY opp_goal_diff DESC;
+        '''
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchall()
+        for x in myresult:
+            print(x)
+
+
 if __name__ == "__main__":
     db = sql_db_connector()
-<<<<<<< HEAD
-=======
-    db.use_db()
->>>>>>> 801dd8982a388405927aa09b96638c5f0e0074c1
-    db.set_names()
+    # db.create_db()
+    # db.set_names()
+    db.get_strength_of_schedule()
