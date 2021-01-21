@@ -126,6 +126,7 @@ def get_fixtures():
                 score = score_a.decode("utf-8")
                 # it was a nightmare figuring out that the score is seperated by an em dash not an en dash
                 split_score = score.split('–')
+                # handle null values for score
                 if len(split_score) > 1:
                     fixture_dict["home_goals"] = split_score[0]
                     fixture_dict["away_goals"] = split_score[1]
@@ -149,3 +150,56 @@ def get_fixtures():
             fixture_list.append(fixture_dict)
 
     return fixture_list
+
+
+'''
+takes a path to a csv file containing urls for each team's player data
+scrapes each url and returns an array of player objects
+these objects will be missing some data which will be provided by
+the premier league api (fantasy price for example)
+'''
+def get_players(url_csv):
+    parser = csv.reader(url_csv)
+    player_list = []
+    for row in parser:
+        res = requests.get(row[1])
+        player_dict = dict()
+
+        ## The next two lines get around the issue with comments breaking the parsing.
+        comm = re.compile("<!--|-->")
+        soup = BeautifulSoup(comm.sub("",res.text),'lxml')
+
+        all_tables = soup.findAll("tbody")
+
+        standard_table = all_tables[0]
+        defensive_actions = all_tables[8]
+        posession = all_tables[9]
+
+        features_wanted_standard = {"games", "games_starts", "goals", "assists", "pens_made", "xg", "npxg", "xa"}
+
+        for f in features_wanted_standard:
+            cell = row.find("td",{"data-stat": f})
+            a = cell.text.strip().encode()
+            text=a.decode("utf-8")
+            player_dict[f] = text
+
+
+        feature_wanted_defense = {"tackles", "tackles_won", "pressures", "pressure_regains"}
+
+        for f in features_wanted_defense:
+            cell = row.find("td",{"data-stat": f})
+            a = cell.text.strip().encode()
+            text=a.decode("utf-8")
+            player_dict[f] = text
+
+        features_wanted_possesion = {"dribbles_completed", "dribbles"}
+
+        for f in features_wanted_possession:
+            cell = row.find("td",{"data-stat": f})
+            a = cell.text.strip().encode()
+            text=a.decode("utf-8")
+            player_dict[f] = text
+
+        player_list.append(player_dict)
+
+    return player_list
