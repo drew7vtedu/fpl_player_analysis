@@ -159,8 +159,11 @@ these objects will be missing some data which will be provided by
 the premier league api (fantasy price for example)
 '''
 def get_players(url_csv):
-    parser = csv.reader(url_csv)
+    file = open(url_csv)
+    parser = csv.reader(file)
     player_list = []
+    # skip header
+    next(parser)
     for row in parser:
         res = requests.get(row[1])
         player_dict = dict()
@@ -171,35 +174,43 @@ def get_players(url_csv):
 
         all_tables = soup.findAll("tbody")
 
-        standard_table = all_tables[0]
-        defensive_actions = all_tables[8]
-        posession = all_tables[9]
+        rows_standard_table = all_tables[0].find_all('tr')
+        rows_defensive_actions = all_tables[8].find_all('tr')
+        rows_possession = all_tables[9].find_all('tr')
 
         features_wanted_standard = {"games", "games_starts", "goals", "assists", "pens_made", "xg", "npxg", "xa"}
+        for srow in rows_standard_table:
+            # name requires special attention
+            name_cell = srow.find("th", {"data-stat": "player"})
+            if name_cell != None:
+                name_a = name_cell.text.strip().encode()
+                name = name_a.decode("utf-8")
+                player_dict["name"] = name
+                for f in features_wanted_standard:
+                    cell = srow.find("td",{"data-stat": f})
+                    a = cell.text.strip().encode()
+                    text=a.decode("utf-8")
+                    player_dict[f] = text
 
-        for f in features_wanted_standard:
-            cell = row.find("td",{"data-stat": f})
-            a = cell.text.strip().encode()
-            text=a.decode("utf-8")
-            player_dict[f] = text
 
+        features_wanted_defense = {"tackles", "tackles_won", "pressures", "pressure_regains"}
+        for drow in rows_defensive_actions:
+            for f in features_wanted_defense:
+                cell = drow.find("td",{"data-stat": f})
+                if cell != None:
+                    a = cell.text.strip().encode()
+                    text=a.decode("utf-8")
+                    player_dict[f] = text
 
-        feature_wanted_defense = {"tackles", "tackles_won", "pressures", "pressure_regains"}
-
-        for f in features_wanted_defense:
-            cell = row.find("td",{"data-stat": f})
-            a = cell.text.strip().encode()
-            text=a.decode("utf-8")
-            player_dict[f] = text
-
-        features_wanted_possesion = {"dribbles_completed", "dribbles"}
-
-        for f in features_wanted_possession:
-            cell = row.find("td",{"data-stat": f})
-            a = cell.text.strip().encode()
-            text=a.decode("utf-8")
-            player_dict[f] = text
+        features_wanted_possession = {"dribbles_completed", "dribbles"}
+        for prow in rows_possession:
+            for f in features_wanted_possession:
+                cell = prow.find("td",{"data-stat": f})
+                if cell != None:
+                    a = cell.text.strip().encode()
+                    text=a.decode("utf-8")
+                    player_dict[f] = text
 
         player_list.append(player_dict)
-
+    file.close()
     return player_list
