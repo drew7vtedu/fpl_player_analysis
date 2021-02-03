@@ -6,6 +6,7 @@ import sys, getopt
 import csv
 from data_analysis import team_object as to
 from data_analysis import fixture_object as fo
+from data_analysis import player_object as po
 
 
 # this is an array containing all team names in the league this year, will need to be updated each season. Team id is its position in the array + 1
@@ -38,6 +39,63 @@ def fixture_from_dict(fd):
     gameweek = fd["gameweek"]
     postponed = fd["postponed"]
     return fo.fixture_obj(home, home_goals, hxg, away, away_goals, axg, gameweek, postponed)
+
+'''
+turn a dictionary containing player data into a player object
+'''
+def player_from_dict(pd):
+    if "id" not in pd:
+        return None
+    id = pd["id"]
+    name = pd["name"]
+    split_name = name.split(' ', 1)
+    if len(split_name) < 2:
+        last_name = name
+        first_name = ''
+    else:
+        first_name = split_name[0]
+        last_name = split_name[1]
+    games = pd["games"]
+    starts = pd["games_starts"]
+    goals = pd["goals"]
+    if goals == '':
+        goals = None
+    assists = pd["assists"]
+    if assists == '':
+        assists = None
+    penalties = pd["pens_made"]
+    if penalties == '':
+        penalties = None
+    xg = pd["xg"]
+    if xg == '':
+        xg = None
+    npxg = pd["npxg"]
+    if npxg == '':
+        npxg = None
+    xa = pd["xa"]
+    if xa == '':
+        xa = None
+    tackles_attempted = pd["tackles"]
+    if tackles_attempted == '':
+        tackles_attempted = None
+    tackles_won = pd["tackles_won"]
+    if tackles_won == '':
+        tackles_won = None
+    pressures = pd["pressures"]
+    if pressures == '':
+        pressures = None
+    pressure_regains = pd["pressure_regains"]
+    if pressure_regains == '':
+        pressure_regains = None
+    dribbles_completed = pd["dribbles_completed"]
+    if dribbles_completed == '':
+        dribbles_completed = None
+    dribbles_attempted = pd["dribbles"]
+    if dribbles_attempted == '':
+        dribbles_attempted = None
+    team_id = teams.index(pd["team"]) + 1
+    return po.player_obj(id, first_name, last_name, games, starts, goals, assists, penalties, xg, npxg, xa, tackles_attempted, tackles_won, pressures, pressure_regains, dribbles_completed, dribbles_attempted, team_id)
+
 
 
 def get_teams():
@@ -165,8 +223,9 @@ def get_players(url_csv):
     # skip header
     next(parser)
     for row in parser:
+        team_list = []
         res = requests.get(row[1])
-        player_dict = dict()
+
 
         ## The next two lines get around the issue with comments breaking the parsing.
         comm = re.compile("<!--|-->")
@@ -180,6 +239,8 @@ def get_players(url_csv):
 
         features_wanted_standard = {"games", "games_starts", "goals", "assists", "pens_made", "xg", "npxg", "xa"}
         for srow in rows_standard_table:
+            player_dict = dict()
+            player_dict["team"] = row[0]
             # name requires special attention
             name_cell = srow.find("th", {"data-stat": "player"})
             if name_cell != None:
@@ -192,16 +253,23 @@ def get_players(url_csv):
                     text=a.decode("utf-8")
                     player_dict[f] = text
 
-
+                team_list.append(player_dict)
         features_wanted_defense = {"tackles", "tackles_won", "pressures", "pressure_regains"}
+        # players are in the same order in each table so we use that to assign these stats to
+        # the correct player
+        i = 0
         for drow in rows_defensive_actions:
+            # temporary id until I scrape from prem website
+            team_list[i]["id"] = i + (30 * teams.index(row[0]))
             for f in features_wanted_defense:
                 cell = drow.find("td",{"data-stat": f})
                 if cell != None:
                     a = cell.text.strip().encode()
                     text=a.decode("utf-8")
-                    player_dict[f] = text
+                    team_list[i][f] = text
+            i += 1
 
+        i = 0
         features_wanted_possession = {"dribbles_completed", "dribbles"}
         for prow in rows_possession:
             for f in features_wanted_possession:
@@ -209,8 +277,10 @@ def get_players(url_csv):
                 if cell != None:
                     a = cell.text.strip().encode()
                     text=a.decode("utf-8")
-                    player_dict[f] = text
+                    team_list[i][f] = text
+            i += 1
+        player_list += team_list
 
-        player_list.append(player_dict)
+
     file.close()
     return player_list

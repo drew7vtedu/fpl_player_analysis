@@ -1,16 +1,28 @@
 class player_obj(object):
 
-    def __init__(self, id, first_name, last_name, pls, cp, price, ly_mins, mins, team):
+    def __init__(self, id, first_name, last_name, games, starts, goals, assists, pens, xg, npxg, xa, tackles, tackles_won, pressures, pressure_regains, dribbles_completed, dribbles, team):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
-        self.points_last_season = pls
-        self.current_points = cp
-        self.price = price
-        self.ly_minutes = ly_mins
-        self.minutes = mins
-        self.xg = 0
-        self.xa = 0
+        # self.points_last_season = pls
+        # self.current_points = cp
+        # self.price = price
+        # self.ly_minutes = ly_mins
+        # self.minutes = mins
+        self.games = games
+        self.starts = starts
+        self.goals = goals
+        self.assists = assists
+        self.penalty_goals = pens
+        self.xg = xg
+        self.npxg = npxg
+        self.xa = xa
+        self.tackles = tackles
+        self.tackles_won = tackles_won
+        self.pressures = pressures
+        self.pressure_regains = pressure_regains
+        self.dribbles_completed = dribbles_completed
+        self.dribbles_attempted = dribbles
         self.team_id = team
 
     def matches(self, first_name, last_name):
