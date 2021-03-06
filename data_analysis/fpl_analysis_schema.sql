@@ -10,7 +10,7 @@ CREATE TABLE players (
     starts INT,
     goals INT,
     assists INT,
-    penalties INT,
+    penalties_scored INT,
     xg FLOAT,
     npxg FLOAT,
     xa FLOAT,

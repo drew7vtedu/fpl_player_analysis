@@ -58,7 +58,7 @@ class sql_db_connector(object):
     def insert_player(self, player):
         # sql = "INSERT INTO players (id, first_name, last_name, points_last_season, current_points, price, ly_minutes, minutes, xg, npxg, expected_assists, team_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         # values = (player.id, player.first_name, player.last_name, player.points_last_season, player.current_points, player.price, player.ly_minutes, player.minutes, player.xg, player.npxg, player.xa, player.team_id)
-        sql = "INSERT INTO players (id, first_name, last_name, games, starts, goals, assists, penalties, xg, npxg, xa, tackles_attempted, tackles_won, pressures, successful_pressures, dribbles_completed, dribbles_attempted, team_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO players (id, first_name, last_name, games, starts, goals, assists, penalties_scored, xg, npxg, xa, tackles_attempted, tackles_won, pressures, successful_pressures, dribbles_completed, dribbles_attempted, team_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         values = (player.id, player.first_name, player.last_name, player.games, player.starts, player.goals, player.assists, player.penalty_goals, player.xg, player.npxg, player.xa, player.tackles, player.tackles_won, player.pressures, player.pressure_regains, player.dribbles_completed, player.dribbles_attempted, player.team_id)
         self.mycursor.execute(sql, values)
         self.mydb.commit()
