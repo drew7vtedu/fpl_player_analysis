@@ -78,10 +78,10 @@ if __name__ == "__main__":
     db.use_db()
     # for team in scraper.get_teams():
     #     db.insert_team(scraper.team_from_dict(team))
-    #
-    # for fixture in scraper.get_fixtures():
-    #     db.insert_fixture(scraper.fixture_from_dict(fixture))
-    for player in scraper.get_players("./data/player_urls.csv"):
-        player_o = scraper.player_from_dict(player)
-        if player_o != None:
-            db.insert_player(player_o)
+
+    for fixture in scraper.get_fixtures():
+        db.insert_fixture(scraper.fixture_from_dict(fixture))
+    # for player in scraper.get_players("./data/player_urls.csv"):
+    #     player_o = scraper.player_from_dict(player)
+    #     if player_o != None:
+    #         db.insert_player(player_o)

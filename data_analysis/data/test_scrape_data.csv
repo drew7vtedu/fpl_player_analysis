@@ -1,21 +1,21 @@
-,squad,goals_against,xg_for,goals_for,xg_against
-0,Manchester City,13,36.4,37,14.8
-1,Manchester Utd,27,33.6,37,26.9
-2,Liverpool,24,41.1,43,23.5
-3,Leicester City,25,31.3,37,24.0
-4,West Ham,27,28.6,31,24.7
-5,Tottenham,21,27.0,34,23.4
-6,Chelsea,23,32.6,35,21.2
-7,Everton,24,23.2,29,24.1
-8,Aston Villa,21,32.4,34,24.5
-9,Arsenal,20,28.7,26,24.5
-10,Southampton,25,20.2,27,24.4
-11,Leeds United,36,32.3,35,35.9
-12,Crystal Palace,36,18.5,25,28.8
-13,Wolves,30,20.8,21,25.0
-14,Newcastle Utd,34,19.5,21,29.9
-15,Burnley,26,16.6,13,29.9
-16,Brighton,29,29.1,23,22.6
-17,Fulham,29,22.0,17,29.4
-18,West Brom,50,13.6,17,39.4
-19,Sheffield Utd,34,19.5,12,30.1
+,squad,xg_for,goals_against,xg_against,goals_for
+0,Manchester City,51.6,17,19.9,56
+1,Manchester Utd,42.4,32,32.1,53
+2,Leicester City,38.9,31,33.4,46
+3,Chelsea,41.7,25,23.7,42
+4,Everton,31.6,33,34.5,39
+5,West Ham,35.5,31,29.2,40
+6,Liverpool,49.5,35,33.5,47
+7,Tottenham,34.2,27,31.3,42
+8,Aston Villa,38.2,27,31.7,38
+9,Arsenal,35.3,27,30.4,34
+10,Leeds United,40.0,44,43.0,43
+11,Wolves,27.4,37,32.1,28
+12,Crystal Palace,21.7,43,39.3,29
+13,Southampton,25.1,44,34.1,31
+14,Burnley,24.0,35,38.9,19
+15,Brighton,37.7,33,26.3,26
+16,Newcastle Utd,24.9,44,37.0,27
+17,Fulham,30.0,33,35.2,21
+18,West Brom,19.1,56,46.5,20
+19,Sheffield Utd,23.7,43,40.4,16
